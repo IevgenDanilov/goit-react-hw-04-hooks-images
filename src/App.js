@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { fetchImages } from "./shared/services/postsGallery";
 import LoaderComponent from "./components/loader/Loader.jsx";
 import ErrorNotification from "./components/errorNotification/ErrorNotification.jsx";
-import Searchbar from "./components/searchbar/Searchbar.jsx";
+import SearchBar from "./components/searchBar/SearchBar.jsx";
 import ImageGallery from "./components/imageGallery/ImageGallery.jsx";
 import ImageGalleryItem from "./components/imageGalleryItem/ImageGalleryItem.jsx";
 import Button from "./components/button/Button.jsx";
@@ -85,7 +85,7 @@ const App = () => {
 
   return (
     <div className="App">
-      <Searchbar onSubmit={handleSubmit} />
+      <SearchBar onSubmit={handleSubmit} />
       {images.length > 0 && (
         <ImageGallery>
           {images.length > 0 && (
