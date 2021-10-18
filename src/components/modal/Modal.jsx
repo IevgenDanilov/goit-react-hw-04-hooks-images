@@ -16,7 +16,7 @@ const Modal = ({ onClose, children }) => {
   };
 
   return (
-    <div className="Overlay" onClick={onClose}>
+    <div id="overlay" className="Overlay" onClick={onClose}>
       <div className="Modal">{children}</div>
     </div>
   );
@@ -26,4 +26,5 @@ export default Modal;
 
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
+  children: PropTypes.object.isRequired,
 };
