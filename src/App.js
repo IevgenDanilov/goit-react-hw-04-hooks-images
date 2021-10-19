@@ -78,7 +78,7 @@ const App = () => {
   };
 
   const onCloseModal = (e) => {
-    if (e && e.target.id !== "overlay") {
+    if (e && e.target.className !== "Overlay") {
       return null;
     }
     setState((prevState) => ({ ...prevState, isModal: false }));
