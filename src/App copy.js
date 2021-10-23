@@ -9,20 +9,27 @@ import Button from "./components/button/Button.jsx";
 import Modal from "./components/modal/Modal.jsx";
 import "./Styles.css";
 
+const initialState = {
+  images: [],
+  isLoading: false,
+  isModal: false,
+  error: null,
+  query: "",
+  page: 1,
+  largeImageURL: "",
+};
+
 const App = () => {
-  const [images, setImages] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isModal, setIsModal] = useState(false);
-  const [error, setError] = useState(null);
-  const [query, setQuery] = useState("");
-  const [page, setPage] = useState(1);
-  const [largeImageURL, setLargeImageURL] = useState("");
+  const [state, setState] = useState(initialState);
 
   const handleSubmit = (inputValue) => {
-    setIsLoading(true);
-    setQuery(inputValue);
-    setImages([]);
-    setPage(1);
+    setState((prevState) => ({
+      ...prevState,
+      isLoading: true,
+      query: inputValue,
+      images: [],
+      page: 1,
+    }));
   };
 
   const getDataImages = (query, page) => {
@@ -32,10 +39,13 @@ const App = () => {
           const { id, webformatURL, largeImageURL } = image;
           return { id, webformatURL, largeImageURL };
         });
-        setImages([...images, ...imagesDataArr]);
-        setPage(page + 1);
-        setIsLoading(false);
-        setError(null);
+        setState((prevState) => ({
+          ...prevState,
+          images: [...prevState.images, ...imagesDataArr],
+          page: prevState.page + 1,
+          isLoading: false,
+          error: null,
+        }));
       })
       .then(() => {
         window.scrollTo({
@@ -43,33 +53,38 @@ const App = () => {
           behavior: "smooth",
         });
       })
-      .catch((error) => {
-        setError(error);
-        setIsLoading(false);
-      });
+      .catch((error) =>
+        setState((prevState) => ({ ...prevState, error, isLoading: false }))
+      );
   };
 
   useEffect(() => {
+    const { query, page, isLoading } = state;
     if (isLoading) {
       getDataImages(query, page);
     }
-  }, [isLoading]);
+  }, [state.isLoading]);
 
   const onButtonClick = () => {
-    setIsLoading(true);
+    setState((prevState) => ({ ...prevState, isLoading: true }));
   };
 
   const onOpenModal = (image) => {
-    setLargeImageURL(image);
-    setIsModal(true);
+    setState((prevState) => ({
+      ...prevState,
+      largeImageURL: image,
+      isModal: true,
+    }));
   };
 
   const onCloseModal = (e) => {
     if (e && e.target.className !== "Overlay") {
       return null;
     }
-    setIsModal(false);
+    setState((prevState) => ({ ...prevState, isModal: false }));
   };
+
+  const { error, isLoading, images, query, largeImageURL, isModal } = state;
 
   return (
     <div className="App">
